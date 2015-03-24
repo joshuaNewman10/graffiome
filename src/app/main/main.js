@@ -35,7 +35,7 @@ var sendTabMessage = function(status, tabID) {
 // Begin Angular Module
 angular.module('graffio.mainController', [])
 .controller('mainController', function($scope, $state) {
-  var ref = new Firebase('https://dazzling-heat-2465.firebaseio.com');
+  var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
 
   $scope.logout = function() {
     ref.unauth();
