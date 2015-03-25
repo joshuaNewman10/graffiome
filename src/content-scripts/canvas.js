@@ -1,13 +1,14 @@
-  'use strict';
+'use strict';
 
-var canvas, ctx, flag = false,
-    prevX = 0,
-    currX = 0,
-    prevY = 0,
-    currY = 0;
+var canvas, ctx
+// , flag = false
+    // prevX = 0,
+    // currX = 0,
+    // prevY = 0,
+    // currY = 0;
 
-var lineColor = 'red',
-    lineWidth = 2;
+// var lineColor = 'red',
+//     lineWidth = 10;
 
 var toggle = 'off';
 
@@ -32,55 +33,65 @@ var saveUserCanvas = function(){
   });
 };
 
-var drawLine = function(){
-  ctx.beginPath();
-  ctx.moveTo(prevX + pageXOffset, prevY + pageYOffset);
-  ctx.lineTo(currX + pageXOffset, currY + pageYOffset);
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = lineWidth;
-  ctx.stroke();
-  ctx.closePath();
-};
+// var drawLine = function(){
+//   ctx.beginPath();
+//   ctx.moveTo(prevX + pageXOffset, prevY + pageYOffset);
+//   ctx.lineTo(currX + pageXOffset, currY + pageYOffset);
+//   ctx.strokeStyle = lineColor;
+//   ctx.lineWidth = lineWidth;
+//   ctx.stroke();
+//   ctx.closePath();
+// };
 
-var findxy = function(res, e){ 
-  if (res === 'down') {
-    flag = true;
-    prevX = currX;
-    prevY = currY;
-    currX = e.clientX - canvas.offsetLeft;
-    currY = e.clientY - canvas.offsetTop;
-    ctx.beginPath();
-    ctx.fillStyle = lineColor;
-    ctx.fillRect(currX, currY, 2, 2);
-    ctx.closePath();
-  }
-  if (res === 'up' || res === 'out') {
-    flag = false;
-  }
-  if (res === 'move') {
-    if (flag) {
-      prevX = currX;
-      prevY = currY;
-      currX = e.clientX - canvas.offsetLeft;
-      currY = e.clientY - canvas.offsetTop;
-      drawLine();
-    }
-  }
-};
+// var findxy = function(res, e){ 
+//   if (res === 'down') {
+//     flag = true;
+//     prevX = currX;
+//     prevY = currY;
+//     currX = e.clientX - canvas.offsetLeft;
+//     currY = e.clientY - canvas.offsetTop;
+//     ctx.beginPath();
+//     ctx.fillStyle = lineColor;
+//     ctx.fillRect(currX, currY, 2, 2);
+//     ctx.closePath();
+//   }
+//   if (res === 'up' || res === 'out') {
+//     flag = false;
+//   }
+//   if (res === 'move') {
+//     if (flag) {
+//       prevX = currX;
+//       prevY = currY;
+//       currX = e.clientX - canvas.offsetLeft;
+//       currY = e.clientY - canvas.offsetTop;
+//       drawLine();
+//     }
+//   }
+// };
 
 var turnEditOn = function($canvas){
-  $canvas.css({zIndex: 100, position: 'absolute', top: 0,left: 0,'pointer-events': ''})
-    .on('mousemove', function(e){findxy('move', e);})
-    .on('mousedown', function(e){findxy('down', e);})
+
+  $canvas.css({zIndex: 1000, position: 'absolute', top: 0,left: 0,'pointer-events': ''})
+    // .on('mousemove', function(e){findxy('move', e);})
+    // .on('mousedown', function(e){findxy('down', e);})
     .on('mouseup', function(e){
-      findxy('up', e); 
+      // findxy('up', e); 
       saveUserCanvas();
     })
-    .on('mouseout', function(e){ findxy('out', e);})
-
+    // .on('mouseout', function(e){ findxy('out', e);})
   getCurrentUser(function(user){
+    
     canvas = document.getElementsByClassName(user)[0];
-    ctx = canvas.getContext('2d');
+    $(canvas).attr('id', 'userCanvas');
+    
+    var canvasFabric = new fabric.Canvas('userCanvas', {
+      isDrawingMode: true
+    });
+
+    canvasFabric.setHeight(document.body.scrollHeight);
+    canvasFabric.setWidth(document.body.scrollWidth);
+
+    // ctx = canvas.getContext('2d');
   }); 
 };
 
@@ -90,11 +101,20 @@ var turnEditOff = function($canvas){
 };
 
 var appendCanvasElement = function(name){
-  $('<canvas id="graffeo-canvas"></canvas>')
-    .css({position: 'absolute', top: 0, left: 0, 'pointer-events': 'none'})
+
+  // var canvasFabric = new fabric.Canvas('graffeo-canvas', {
+  //   isDrawingMode: true
+  // });
+
+  // canvasFabric.setHeight(document.body.scrollHeight);
+  // canvasFabric.setWidth(document.body.scrollWidth);
+  
+  $('<canvas></canvas>')
+    .css({position: 'absolute', top: 0, left: 0, 'pointer-events': 'none', 'z-index':1000})
     .attr('width', document.body.scrollWidth)
     .attr('height', document.body.scrollHeight)
     .attr('class', name)
+    .addClass("graffeo-canvas")
     .appendTo('body');
 };
 
@@ -130,10 +150,10 @@ var toggleUserCanvasOff = function(){
   });
 };
 
-var removeGraffeoCanvasAll = function(){
-  console.log('helo remove')
- $('canvas#graffeo-canvas').remove();
-};
+// var removeGraffeoCanvasAll = function(){
+//   console.log('helo remove')
+//  $('canvas#graffeo-canvas').remove();
+// };
 
 var clearUserCanvas = function(){
   ctx.clearRectangle(0, 0, canvas.width, canvas.height);
