@@ -33,19 +33,14 @@ var sendTabMessage = function(status, tabID) {
 };
 
 // Begin Angular Module
-angular.module('graffio.mainController', [])
-.controller('mainController', function($scope, $state) {
-  var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
+angular.module('graffio.drawController', [])
+.controller('drawController', function($scope, $state) {
+  // var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
 
-  $scope.draw = function(){
-    $state.go('draw');
+  $scope.end = function(){
+    $state.go('main');
   }
 
-  $scope.logout = function() {
-    ref.unauth();
-    chrome.runtime.sendMessage({action: 'clearToken'});
-    $state.go('login');
-  };
 }).controller('onOffController', function($scope){ 
   // initialize text before we can query the current tab
   $scope.onOffButtonTxt = 'loading...';
@@ -92,7 +87,9 @@ angular.module('graffio.mainController', [])
     console.log('status set');
   });
 
-}).controller('paletteController', function($scope){
+})
+
+.controller('paletteController', function($scope){
 
   $scope.erase = function(){
     getCurrentTabID(function(activeTab){
@@ -120,6 +117,3 @@ angular.module('graffio.mainController', [])
   };
 
 });
-
-
-//
