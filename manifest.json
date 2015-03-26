@@ -35,7 +35,8 @@
         "bower_components/firebase/firebase.js",
         "bower_components/CryptoJS/rollups/sha1.js",
         "src/content-scripts/canvas.js"
-      ]
+      ],
+      "css": ["src/content-scripts/style.css"]
     }
   ]
 }
