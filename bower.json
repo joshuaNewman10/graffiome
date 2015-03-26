@@ -24,7 +24,8 @@
     "angular-bootstrap": "~0.12.1",
     "angular-slider": "~0.2.14",
     "nya-bootstrap-select": "~2.0.10",
-    "angular-bootstrap-colorpicker": "~3.0.11"
+    "angular-bootstrap-colorpicker": "~3.0.11",
+    "nya-bootstrap-select": "~2.0.10"
   },
   "resolutions": {
     "angular": "~1.2.28"
