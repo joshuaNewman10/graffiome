@@ -39,6 +39,7 @@ angular.module('graffio.mainController', [])
 
   $scope.draw = function(){
     $state.go('draw');
+    //start drawing functionality
   }
 
   $scope.logout = function() {
@@ -92,34 +93,4 @@ angular.module('graffio.mainController', [])
     console.log('status set');
   });
 
-}).controller('paletteController', function($scope){
-
-  $scope.erase = function(){
-    getCurrentTabID(function(activeTab){
-      chrome.tabs.sendMessage(activeTab, {erase: true}, function(res) {
-        console.log(res)
-      });
-    });
-  };
-
-  $scope.changeColor = function(event){
-    var color = angular.element(event.target).attr('class').split(' ')[0]
-    getCurrentTabID(function(activeTab){
-      chrome.tabs.sendMessage(activeTab, {changeColor: color}, function(res) {
-        console.log(res)
-      });
-    });
-  };
-
-  $scope.nyan = function(){
-    getCurrentTabID(function(activeTab){
-      chrome.tabs.sendMessage(activeTab, {image: 'static/nyan.gif'}, function(res) {
-        console.log(res)
-      });
-    });
-  };
-
-});
-
-
-//
+})
