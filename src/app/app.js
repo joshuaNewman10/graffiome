@@ -1,11 +1,13 @@
 'use strict';
-angular.module('graffio', [
+var app = angular.module('graffio', [
   'graffio.signupController',
   'graffio.loginController',
   'graffio.mainController',
+  'graffio.drawController',
   'ui.router'
-])
-.config(function($stateProvider, $urlRouterProvider) {
+]);
+
+app.config(function($stateProvider, $urlRouterProvider) {
   var rootRef = new Firebase('https://radiant-heat-919.firebaseio.com/web/uauth');
   var user = rootRef.getAuth();
   if (!user) {
@@ -30,5 +32,10 @@ angular.module('graffio', [
       url: '/main',
       templateUrl: 'main/main.html',
       controller: 'mainController'
+    })
+    .state('draw', {
+      url: '/draw',
+      templateUrl: 'draw/draw.html',
+      controller: 'drawController'
     });
 });

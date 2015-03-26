@@ -1,16 +1,14 @@
-<div class="container" id="mainPopup">
+<div class="container" id="draw">
   <img src="../../static/graffiome_logo_64.png" alt="graffio.me icon"/>
   <h2>Controls</h2>
 
   <button ng-click="toggleStatus()" ng-controller="onOffController">Turn Editing {{ onOffButtonTxt }}</button>
   <br>
-  <!-- <button class="black" ng-click="changeColor($event)" ng-controller="paletteController">Black</button>
+  <button class="black" ng-click="changeColor($event)" ng-controller="paletteController">Black</button>
   <button class="blue" ng-click="changeColor($event)" ng-controller="paletteController">Blue</button>
   <button class="red" ng-click="changeColor($event)" ng-controller="paletteController">Red</button>
-   -->
-  <!-- <button ng-click="erase()" ng-controller="paletteController">Erase</button> -->
-  <button ng-click="draw()" >Draw</button>
-  
+  <button ng-click="nyan()" ng-controller="paletteController">Nyan</button>
+  <button ng-click="erase()" ng-controller="paletteController">Erase</button>
   <br>
-  <button ng-click="logout()">Log Out!</button>
+  <button ng-click="end()">Finish Drawing!</button>
 </div>
