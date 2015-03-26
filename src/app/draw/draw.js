@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 // helper function to determine what the current tab is and perform a callback on that tabID value
 var getCurrentTabID = function(callback) {
   chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
@@ -33,9 +35,16 @@ var sendTabMessage = function(status, tabID) {
 };
 
 // Begin Angular Module
-angular.module('graffio.drawController', [])
+angular.module('graffio.drawController', [
+  'ui.slider',
+  'nya.bootstrap.select'
+  ])
 .controller('drawController', function($scope, $state) {
   // var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
+  
+  $scope.brushselect = "paint";
+
+  $scope.thickness = 1;
 
   $scope.end = function(){
     $state.go('main');

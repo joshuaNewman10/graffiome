@@ -1,6 +1,7 @@
 .container {
-  width:300px;
+  width:350px;
   height:auto;
+  padding:20px;
 }
 
 img {
@@ -15,9 +16,14 @@ ul {
 label, input {
     display: inline-block;
     vertical-align: baseline;
-    width:100px;
+    width:140px;
 }
 
 button {
   margin-top:5px;
+}
+
+.cdbl-slider {
+    width: 200px;
+    margin: 10px;    
 }

@@ -2,7 +2,7 @@
 angular.module('graffio.loginController', [])
 .controller('loginController', function($scope, $state) {
   var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
-  
+
   $scope.logIn = function() {
     console.log('login called!');
     ref.authWithPassword({

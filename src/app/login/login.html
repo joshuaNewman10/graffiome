@@ -1,10 +1,9 @@
 <div class="container" id="login">
-  <img src="../../static/graffiome_logo_64.png" alt="graffio.me icon"/>
-  <h2>Login</h2>
+  <h2>Graffito!</h2>
   <form name="login">
     <ul>
       <li>
-        <label for="email">Email Address:</label>
+        <label for="email">Email:</label>
         <input ng-model="email" id="email" type="email" placeholder="test@test.com" required></input>
       </li>
       <li>
@@ -12,7 +11,7 @@
         <input ng-model="password" id="password" type="password" placeholder="******" required></input>
       </li>
       <li>
-        <button ng-click="logIn()">Log In</button>
+        <button class="btn btn-success" ng-click="logIn()">Log In</button>
       </li>
     </ul>
   </form>
