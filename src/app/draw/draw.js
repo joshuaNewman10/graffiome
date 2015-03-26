@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 // helper function to determine what the current tab is and perform a callback on that tabID value
 var getCurrentTabID = function(callback) {
   chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
@@ -33,20 +35,21 @@ var sendTabMessage = function(status, tabID) {
 };
 
 // Begin Angular Module
-angular.module('graffio.mainController', [])
-.controller('mainController', function($scope, $state) {
-  var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
+angular.module('graffio.drawController', [
+  'ui.slider',
+  'nya.bootstrap.select'
+  ])
+.controller('drawController', function($scope, $state) {
+  // var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
+  
+  $scope.brushselect = "paint";
 
-  $scope.draw = function(){
-    $state.go('draw');
-    //start drawing functionality
+  $scope.thickness = 1;
+
+  $scope.end = function(){
+    $state.go('main');
   }
 
-  $scope.logout = function() {
-    ref.unauth();
-    chrome.runtime.sendMessage({action: 'clearToken'});
-    $state.go('login');
-  };
 }).controller('onOffController', function($scope){ 
   // initialize text before we can query the current tab
   $scope.onOffButtonTxt = 'loading...';
@@ -94,3 +97,32 @@ angular.module('graffio.mainController', [])
   });
 
 })
+
+.controller('paletteController', function($scope){
+
+  $scope.erase = function(){
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {erase: true}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
+  $scope.changeColor = function(event){
+    var color = angular.element(event.target).attr('class').split(' ')[0]
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {changeColor: color}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
+  $scope.nyan = function(){
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {image: 'static/nyan.gif'}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
+});

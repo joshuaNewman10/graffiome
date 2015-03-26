@@ -1,6 +1,7 @@
 .container {
-  width:300px;
-  height:auto;
+  width:350px;
+  height:380px;
+  padding:20px;
 }
 
 img {
@@ -15,9 +16,23 @@ ul {
 label, input {
     display: inline-block;
     vertical-align: baseline;
-    width:100px;
+    width:140px;
 }
 
 button {
   margin-top:5px;
+}
+
+.cdbl-slider {
+    width: 200px;
+    margin: 10px;    
+}
+
+.btn-primary {
+  float: right;
+}
+
+#colorpicker {
+  position: absolute;
+  bottom: 150px;
 }
