@@ -4,6 +4,7 @@ var app = angular.module('graffio', [
   'graffio.loginController',
   'graffio.mainController',
   'graffio.drawController',
+  'colorpicker.module',
   'ui.bootstrap',
   'ui.router'
 ]);
