@@ -1,6 +1,6 @@
 .container {
   width:350px;
-  height:auto;
+  height:380px;
   padding:20px;
 }
 
@@ -26,4 +26,13 @@ button {
 .cdbl-slider {
     width: 200px;
     margin: 10px;    
+}
+
+.btn-primary {
+  float: right;
+}
+
+#colorpicker {
+  position: absolute;
+  bottom: 150px;
 }
