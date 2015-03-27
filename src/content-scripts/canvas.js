@@ -18,7 +18,6 @@
     
     //create canvas and append to page
    
-
     //make fabric obj, attach canvas to frabric and associate with currentUser
     getCurrentUser(function(user){
 
@@ -59,16 +58,13 @@
   };
 
   var toggleOff = function(){
-    console.log("in toggleOff function")
     toggle = 'off';
     disableDrawingMode();
-    console.log("status of toggle after ToggleOff: ", toggle)
   }
 
   var toggleOn = function(){
-    enableDrawingMode();
-    console.log("in toggleOn function")
     toggle = 'on';
+    enableDrawingMode();
   }
 
   var saveUserCanvas = function(){
@@ -115,6 +111,34 @@ var drawOtherUsersCanvasElement = function(context, data){
   }
 };
 
+var drawingOptions = {
+  changeColor: function(color) {
+    canvasFabric.freeDrawingBrush.color = color;
+  },
+  changeLineWidth: function(width) {
+    canvasFabric.freeDrawingBrush.width = width;
+  },
+  changeBrushType: function(brush) {
+    // if (this.value === 'hline') {
+    //      canvas.freeDrawingBrush = vLinePatternBrush;
+    //    }
+    //    else if (this.value === 'vline') {
+    //      canvas.freeDrawingBrush = hLinePatternBrush;
+    //    }
+    //    else if (this.value === 'square') {
+    //      canvas.freeDrawingBrush = squarePatternBrush;
+    //    }
+    //    else if (this.value === 'diamond') {
+    //      canvas.freeDrawingBrush = diamondPatternBrush;
+    //    }
+    //    else if (this.value === 'texture') {
+    //      canvas.freeDrawingBrush = texturePatternBrush;
+        console.log(brush)
+         canvasFabric.freeDrawingBrush = new fabric[brush + 'Brush'](canvasFabric);
+      
+  }
+};
+
 
   chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse){
@@ -133,14 +157,18 @@ var drawOtherUsersCanvasElement = function(context, data){
           
       // Initialize toggle status for popup button
       } else if ( request.getStatus === true ){
-
         sendResponse({status:toggle});
       } else if (request.canvasData) { // new Canvas data
         onCanvasData(request.site, request.user, request.data);
       } else if (request.erase){
         eraseUserCanvas();
+      } else if (request.brushSelect){
+        console.log("in brush select")
+        drawingOptions.changeBrushType(request.brushSelect);
       } else if (request.changeColor){
-        lineColor = request.changeColor;
+        drawingOptions.changeColor(request.changeColor)
+      } else if (request.changeWidth){
+        drawingOptions.changeLineWidth(request.changeWidth)
       } else if (request.image){
         getCurrentUser(function(user){
           var userCanvas = $('.'+ user);
@@ -151,11 +179,6 @@ var drawOtherUsersCanvasElement = function(context, data){
   );
 
   initializePage();
-
-
-  
-
-
 
 
 

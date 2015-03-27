@@ -35,17 +35,13 @@ angular.module('graffio.drawController', [
     });
   };
 
-  $scope.brushselect = "paint";
+  $scope.brush = "paint";
 
   $scope.thickness = 1;
 
   $scope.end = function(){
     $state.go('main');
   }
-
-})
-
-.controller('paletteController', function($scope){
 
   $scope.erase = function(){
     getCurrentTabID(function(activeTab){
@@ -55,8 +51,27 @@ angular.module('graffio.drawController', [
     });
   };
 
-  $scope.changeColor = function(event){
-    var color = angular.element(event.target).attr('class').split(' ')[0]
+  $scope.brushSelect = function(event, brush){
+    console.log(brush);
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {brushSelect: brush}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
+
+  $scope.changeWidth = function(event, thickness){
+    console.log(thickness);
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {changeWidth: thickness}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
+  $scope.changeColor = function(event, color){
+    console.log(color);
     getCurrentTabID(function(activeTab){
       chrome.tabs.sendMessage(activeTab, {changeColor: color}, function(res) {
         console.log(res)
@@ -72,4 +87,10 @@ angular.module('graffio.drawController', [
     });
   };
 
-});
+})
+
+// .controller('paletteController', function($scope){
+
+
+
+// });
