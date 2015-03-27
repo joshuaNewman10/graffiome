@@ -43,10 +43,6 @@ angular.module('graffio.drawController', [
     $state.go('main');
   }
 
-})
-
-.controller('paletteController', function($scope){
-
   $scope.erase = function(){
     getCurrentTabID(function(activeTab){
       chrome.tabs.sendMessage(activeTab, {erase: true}, function(res) {
@@ -55,8 +51,8 @@ angular.module('graffio.drawController', [
     });
   };
 
-  $scope.changeColor = function(event){
-    var color = angular.element(event.target).attr('class').split(' ')[0]
+  $scope.changeColor = function(event, color){
+    console.log(color);
     getCurrentTabID(function(activeTab){
       chrome.tabs.sendMessage(activeTab, {changeColor: color}, function(res) {
         console.log(res)
@@ -72,4 +68,10 @@ angular.module('graffio.drawController', [
     });
   };
 
-});
+})
+
+// .controller('paletteController', function($scope){
+
+
+
+// });

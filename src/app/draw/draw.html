@@ -33,5 +33,5 @@
    <br>
   <button class='btn btn-primary' ng-click="end(); toggleStatus()"><i class="fa-check fa"></i> Submit</button>
    <br>
-  <input id='colorpicker' style={{"background-color:"+color+";"}} placeholder="Choose a color!" colorpicker type="text" ng-model="color" />
+  <input id='colorpicker' ng-change="changeColor($event, color)" style={{"background-color:"+color+";"}} placeholder="Choose a color!" colorpicker type="text" ng-model="color" />
 </div>
