@@ -51,6 +51,15 @@ angular.module('graffio.drawController', [
     });
   };
 
+  $scope.changeWidth = function(event, thickness){
+    console.log(thickness);
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {changeWidth: thickness}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
   $scope.changeColor = function(event, color){
     console.log(color);
     getCurrentTabID(function(activeTab){

@@ -165,6 +165,8 @@ var drawingOptions = {
         eraseUserCanvas();
       } else if (request.changeColor){
         drawingOptions.changeColor(request.changeColor)
+      } else if (request.changeWidth){
+        drawingOptions.changeLineWidth(request.changeWidth)
       } else if (request.image){
         getCurrentUser(function(user){
           var userCanvas = $('.'+ user);
