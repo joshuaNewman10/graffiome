@@ -27,10 +27,13 @@ var initializePage = function() {
   $(window).unload(function (){
     chrome.runtime.sendMessage({action: 'stopSiteData', site: settings.tabUrl});
   });
+};
+
+var makeNewCanvas = function() {
   var newId = makeUniqueid();
   settings.currentCanvasId = newId;
   //create canvas and append to page
- 
+  
   //make fabric obj, attach canvas to frabric and associate with currentUser
   getCurrentUser(function(user){
 
@@ -49,10 +52,10 @@ var initializePage = function() {
 
     canvasFabric.setHeight(document.body.scrollHeight);
     canvasFabric.setWidth(document.body.scrollWidth);
-  
+    enableDrawingMode();
+
     // settings.ctx = canvasFabric.getContext('2d');
   }); 
-
 };
 
  var getCurrentUser = function(callback){
@@ -73,12 +76,12 @@ var initializePage = function() {
   var toggleOff = function(){
     toggle.switch = 'off';
     disableDrawingMode();
-  }
+  };
 
   var toggleOn = function(){
     toggle.switch = 'on';
-    enableDrawingMode();
-  }
+    makeNewCanvas();
+  };
 
   var saveUserCanvas = function(){
     console.log(canvasFabric);
@@ -88,13 +91,12 @@ var initializePage = function() {
       {action: 'saveCanvas', site: settings.tabUrl, data: data, id: settings.currentCanvasId}, 
       function(response) {
         if (response.saveStatus) {
+          $('.canvas-container').remove();
           console.log('saving user canvas');
         } else {
           console.log('failed to save canvas');
       }
     });
-    //remove canvas fabric from DOM
-    
   };
 
 var appendOtherUsersCanvasToDOM = function(name) {
