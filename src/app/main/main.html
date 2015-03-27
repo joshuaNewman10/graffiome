@@ -1,12 +1,12 @@
 <div class="container" id="mainPopup">
   <h2>Controls</h2>
 
-  <h4>Show drawings: {{ onOffButtonTxt }} <input type="checkbox" ng-click="toggleStatus()" ng-controller="onOffController"></input></h4>
+ <!--  <h4>Show drawings: {{ onOffButtonTxt }} <input type="checkbox" ng-click="toggleStatus()" ng-controller="onOffController"></input></h4> -->
   <!-- <button class="black" ng-click="changeColor($event)" ng-controller="paletteController">Black</button>
   <button class="blue" ng-click="changeColor($event)" ng-controller="paletteController">Blue</button>
   <button class="red" ng-click="changeColor($event)" ng-controller="paletteController">Red</button>
    -->
   <!-- <button ng-click="erase()" ng-controller="paletteController">Erase</button> -->
-  <button class="btn btn-default" ng-click="draw()"><i class="fa fa-paint-brush"></i> New Drawing</button>
+  <button class="btn btn-default" ng-click="draw(); toggleStatus()" ng-controller="onOffController"><i class="fa fa-paint-brush"></i> New Drawing</button>
   <button class="btn btn-danger" ng-click="logout()"><i class="fa fa-sign-out"></i> Log Out!</button>
 </div>
