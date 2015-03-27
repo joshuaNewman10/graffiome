@@ -68,7 +68,8 @@
   }
 
   var saveUserCanvas = function(){
-    var data = settings.canvasFabric.toDataURL();
+    console.log(canvasFabric);
+    var data = canvasFabric.toDataURL();
     // console.log('save user canvas: json canvas data', data);
     chrome.runtime.sendMessage(
       {action: 'saveCanvas', site: settings.tabUrl, data: data}, 
@@ -147,6 +148,8 @@ var drawingOptions = {
       if ( request.toggle === 'off' ){
           // toggleUserCanvasOff();
           toggleOff();
+          console.log('save the canvas plesae!');
+          saveUserCanvas();
           // disableDrawingMode();
           sendResponse({confirm:'canvas turned off'});
       } else if ( request.toggle === 'on' ){
