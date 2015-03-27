@@ -35,7 +35,7 @@ angular.module('graffio.drawController', [
     });
   };
 
-  $scope.brushselect = "paint";
+  $scope.brush = "paint";
 
   $scope.thickness = 1;
 
@@ -50,6 +50,16 @@ angular.module('graffio.drawController', [
       });
     });
   };
+
+  $scope.brushSelect = function(event, brush){
+    console.log(brush);
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {brushSelect: brush}, function(res) {
+        console.log(res)
+      });
+    });
+  };
+
 
   $scope.changeWidth = function(event, thickness){
     console.log(thickness);

@@ -12,18 +12,18 @@
  -->
  <span>Brush Style:</span>
  
-   <ol class="nya-bs-select" ng-model="brushselect">
-       <li value="paint" class="nya-bs-option">
+   <ol class="nya-bs-select" ng-change="brushSelect($event, brush)" ng-model="brush">
+       <li value="Pencil" class="nya-bs-option">
            <a>
                Paintbrush
            </a>
        </li>
-       <li value="spray" class="nya-bs-option">
+       <li value="Spray" class="nya-bs-option">
            <a>
                Spraybrush
            </a>
        </li>
-       <li value="circle" class="nya-bs-option">
+       <li value="Circle" class="nya-bs-option">
            <a>
                Circlebrush
            </a>

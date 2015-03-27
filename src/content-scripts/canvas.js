@@ -119,24 +119,23 @@ var drawingOptions = {
     canvasFabric.freeDrawingBrush.width = width;
   },
   changeBrushType: function(brush) {
-    if (this.value === 'hline') {
-         canvas.freeDrawingBrush = vLinePatternBrush;
-       }
-       else if (this.value === 'vline') {
-         canvas.freeDrawingBrush = hLinePatternBrush;
-       }
-       else if (this.value === 'square') {
-         canvas.freeDrawingBrush = squarePatternBrush;
-       }
-       else if (this.value === 'diamond') {
-         canvas.freeDrawingBrush = diamondPatternBrush;
-       }
-       else if (this.value === 'texture') {
-         canvas.freeDrawingBrush = texturePatternBrush;
-       }
-       else {
-         canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
-       }
+    // if (this.value === 'hline') {
+    //      canvas.freeDrawingBrush = vLinePatternBrush;
+    //    }
+    //    else if (this.value === 'vline') {
+    //      canvas.freeDrawingBrush = hLinePatternBrush;
+    //    }
+    //    else if (this.value === 'square') {
+    //      canvas.freeDrawingBrush = squarePatternBrush;
+    //    }
+    //    else if (this.value === 'diamond') {
+    //      canvas.freeDrawingBrush = diamondPatternBrush;
+    //    }
+    //    else if (this.value === 'texture') {
+    //      canvas.freeDrawingBrush = texturePatternBrush;
+        console.log(brush)
+         canvasFabric.freeDrawingBrush = new fabric[brush + 'Brush'](canvasFabric);
+      
   }
 };
 
@@ -163,6 +162,9 @@ var drawingOptions = {
         onCanvasData(request.site, request.user, request.data);
       } else if (request.erase){
         eraseUserCanvas();
+      } else if (request.brushSelect){
+        console.log("in brush select")
+        drawingOptions.changeBrushType(request.brushSelect);
       } else if (request.changeColor){
         drawingOptions.changeColor(request.changeColor)
       } else if (request.changeWidth){
