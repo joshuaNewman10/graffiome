@@ -18,7 +18,6 @@ var getStatus = function(callback) {
   getCurrentTabID(function(tabID) {
     // console.log("5: in chromesTab", tabID)
     chrome.tabs.sendMessage(tabID, {getStatus: true}, function(res) {
-      console.log("LINE 21:", res);
       callback(res.status, tabID);
     });
   });
@@ -33,8 +32,9 @@ var sendTabMessage = function(status, tabID) {
  } else {
    msg = 'off';
  }
+
  chrome.tabs.sendMessage(tabID, {toggle: msg}, function(res){
-   // console.log('toggleStatus:', res);
+
  });
 };
 
@@ -89,7 +89,6 @@ angular.module('graffio.mainController', [])
 
 
     
-    //////////// *1* ////////////////////
   // function called when button is pressed by user wishing to toggle the current state
   $scope.toggleStatus = function() {
     // console.log("1: toggleStatus button has been pressed")

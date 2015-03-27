@@ -1,15 +1,9 @@
 <div class="container" id="draw">
-  <h2>Controls</h2>
 
   <span>Brush Size:</span>
 
-  <slider floor="1" ng-mouseup="changeWidth($event, thickness)" ceiling="50" step="1" precision="1" ng-model="thickness"></slider>
-<!--   <button class="black" ng-click="changeColor($event)" ng-controller="paletteController">Black</button>
-  <button class="blue" ng-click="changeColor($event)" ng-controller="paletteController">Blue</button>
-  <button class="red" ng-click="changeColor($event)" ng-controller="paletteController">Red</button>
-  <button ng-click="nyan()" ng-controller="paletteController">Nyan</button>
-  <button ng-click="erase()" ng-controller="paletteController">Erase</button>
- -->
+  <slider floor="1" ng-mouseup="changeWidth($event, thickness)" ceiling="80" step="1" precision="1" ng-model="thickness"></slider>
+
  <span>Brush Style:</span>
  
    <ol class="nya-bs-select" ng-change="brushSelect($event, brush)" ng-model="brush">
@@ -32,7 +26,8 @@
 
 
    <br>
-  <button class='btn btn-primary' ng-click="end(); toggleStatus()"><i class="fa-check fa"></i> Submit</button>
+  <button class='btn btn-success finish' ng-click="end(); toggleStatus()"><i class="fa-check fa"></i> Finish</button>
    <br>
+    <span>Color:</span>
   <input id='colorpicker' ng-change="changeColor($event, color)" style={{"background-color:"+color+";"}} placeholder="Choose a color!" colorpicker type="text" ng-model="color" />
 </div>
