@@ -2,6 +2,8 @@
   var canvas;
   var canvasFabric;
 
+  var toggle = 'off';
+
   var settings = {
     tabUrl:  CryptoJS.SHA1(document.URL).toString()
   };
@@ -30,7 +32,7 @@
       canvas.appendTo('body');
 
       canvasFabric = new fabric.Canvas(user, {
-        isDrawingMode: true,
+        isDrawingMode: false
       });
 
       canvasFabric.setHeight(document.body.scrollHeight);
@@ -43,30 +45,42 @@
 
  var getCurrentUser = function(callback){
   chrome.runtime.sendMessage({action: 'getUser'}, function(response) {
-    console.log('response', response);
+    // console.log('response', response);
     callback(response.user);
   });
 };
 
   var enableDrawingMode = function() { //maybe change z-index
-    settings.canvasFabric.isDrawingMode = true; 
-
+    canvasFabric.isDrawingMode = true; 
   };
 
   var disableDrawingMode = function() { //maybe change z-index
-    settings.canvasFabric.isDrawingMode = false; //look at draggable
+    canvasFabric.isDrawingMode = false; //look at draggable
   };
+
+  var toggleOff = function(){
+    console.log("in toggleOff function")
+    toggle = 'off';
+    disableDrawingMode();
+    console.log("status of toggle after ToggleOff: ", toggle)
+  }
+
+  var toggleOn = function(){
+    enableDrawingMode();
+    console.log("in toggleOn function")
+    toggle = 'on';
+  }
 
   var saveUserCanvas = function(){
     var data = settings.canvasFabric.toDataURL();
-    console.log('save user canvas: json canvas data', data);
+    // console.log('save user canvas: json canvas data', data);
     chrome.runtime.sendMessage(
       {action: 'saveCanvas', site: settings.tabUrl, data: data}, 
       function(response) {
         if (response.saveStatus) {
-          console.log('saving user canvas');
+          // console.log('saving user canvas');
         } else {
-          console.log('failed to save canvas');
+          // console.log('failed to save canvas');
       }
     });
   };
@@ -89,10 +103,10 @@ var drawOtherUsersCanvasElement = function(context, data){
 };
 
  var onCanvasData = function(site, user, data) {
-  console.log('getting new canvas data', user, document.getElementsByClassName(user)[0] );
+  // console.log('getting new canvas data', user, document.getElementsByClassName(user)[0] );
   // if the user does not already have a canvas
   if ( settings.tabUrl === site ) {
-    console.log('in the right tab');
+    // console.log('in the right tab');
     if ( !document.getElementsByClassName(user)[0] ) {
       appendOtherUsersCanvasToDOM(user);
     }
@@ -104,18 +118,22 @@ var drawOtherUsersCanvasElement = function(context, data){
 
   chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse){
+      console.log("6:", request);
       // Toggle User Canvas Messages
       if ( request.toggle === 'off' ){
           // toggleUserCanvasOff();
-          disableDrawingMode();
+          toggleOff();
+          // disableDrawingMode();
           sendResponse({confirm:'canvas turned off'});
       } else if ( request.toggle === 'on' ){
-        enableDrawingMode();
+        // enableDrawingMode();
           // toggleUserCanvasOn(); 
+          toggleOn();
           sendResponse({confirm:'canvas turned on'});
           
       // Initialize toggle status for popup button
       } else if ( request.getStatus === true ){
+
         sendResponse({status:toggle});
       } else if (request.canvasData) { // new Canvas data
         onCanvasData(request.site, request.user, request.data);

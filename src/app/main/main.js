@@ -1,8 +1,11 @@
 'use strict';
 
 // helper function to determine what the current tab is and perform a callback on that tabID value
+//////////////////*3*/////////////////////
 var getCurrentTabID = function(callback) {
+  console.log("3: in getCurrentTabID", callback)
   chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+    console.log("4: in chromesTab", tabs)
     var currentTabId = tabs[0].id;
     callback(currentTabId);
   });
@@ -11,8 +14,15 @@ var getCurrentTabID = function(callback) {
 // getStatus takes a callback and applies it to the status of the current tab
 // it queries the current tab for the status of the app on that tab
 var getStatus = function(callback) {
+  console.log("2: getStatus has started with callback", callback)
   getCurrentTabID(function(tabID) {
+    console.log("5: in chromesTab", tabID)
     chrome.tabs.sendMessage(tabID, {getStatus: true}, function(res) {
+      console.log("recieved message back.")
+      console.log("callback: ", callback);
+      console.log("res-status:", res.status);
+      console.log("tabID", tabID);
+
       callback(res.status, tabID);
     });
   });
@@ -37,6 +47,19 @@ angular.module('graffio.mainController', [])
 .controller('mainController', function($scope, $state) {
   var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
 
+
+//FUNCTION TO SEND TO DRAW SCREEN
+  getStatus(function(status, tabID) {
+    // send a message to the tab and also set the current button value to be the opposite
+    // ie. if a user clicks 'On' it should send a message telling the app to start drawing
+    // and also change the UI here to indicate that the next click will turn the app off
+    // sendTabMessage(status, tabID);
+    console.log("FUNCTION TO SEND TO DRAW SCREEN:", status)
+    if (status === 'on') {
+      $state.go('draw');
+    }
+  });
+
   $scope.draw = function(){
     $state.go('draw');
     //start drawing functionality
@@ -51,27 +74,29 @@ angular.module('graffio.mainController', [])
   // initialize text before we can query the current tab
   $scope.onOffButtonTxt = 'loading...';
 
-
-
   // generic UI update function for the status of the app
   // needs to use $scope.$apply since these callback functions otherwise wouldn't trigger a $digest event
   // even though they would update the $scope variable values...
   // $scope.$apply triggers the $digest, which in turn is what causes a UI update
   var setStatusUi = function(status) {
-    console.log('setStatusUI called...');
-    console.log('setStatusUI status: ', status);
+    console.log('this is SetStatusUI Status: ', status);
     $scope.$apply(function() {
       if (status === 'off') {
         $scope.onOffButtonTxt = 'On';
+        console.log("onOffButton:" + $scope.onOffButtonTxt);
       } else {
         $scope.onOffButtonTxt = 'Off';
+        console.log("onOffButton:" + $scope.onOffButtonTxt);
       }
     });
   };
+
+
     
+    //////////// *1* ////////////////////
   // function called when button is pressed by user wishing to toggle the current state
   $scope.toggleStatus = function() {
-
+    console.log("1: toggleStatus button has been pressed")
     // figure out what existing state is from the content script
     getStatus(function(status, tabID) {
       // send a message to the tab and also set the current button value to be the opposite
@@ -79,8 +104,10 @@ angular.module('graffio.mainController', [])
       // and also change the UI here to indicate that the next click will turn the app off
       sendTabMessage(status, tabID);
       if (status === 'off') {
+        console.log("this is GetStatus Function Status:" + status)
         setStatusUi('on');  
       } else {
+        console.log("this is GetStatus Function Status:" + status)
         setStatusUi('off');
       }
     });
