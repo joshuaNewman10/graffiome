@@ -3,9 +3,9 @@
 // helper function to determine what the current tab is and perform a callback on that tabID value
 //////////////////*3*/////////////////////
 var getCurrentTabID = function(callback) {
-  console.log("3: in getCurrentTabID", callback)
+  // console.log("3: in getCurrentTabID", callback)
   chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
-    console.log("4: in chromesTab", tabs)
+    // console.log("4: in chromesTab", tabs)
     var currentTabId = tabs[0].id;
     callback(currentTabId);
   });
@@ -14,15 +14,11 @@ var getCurrentTabID = function(callback) {
 // getStatus takes a callback and applies it to the status of the current tab
 // it queries the current tab for the status of the app on that tab
 var getStatus = function(callback) {
-  console.log("2: getStatus has started with callback", callback)
+  // console.log("2: getStatus has started with callback", callback)
   getCurrentTabID(function(tabID) {
-    console.log("5: in chromesTab", tabID)
+    // console.log("5: in chromesTab", tabID)
     chrome.tabs.sendMessage(tabID, {getStatus: true}, function(res) {
-      console.log("recieved message back.")
-      console.log("callback: ", callback);
-      console.log("res-status:", res.status);
-      console.log("tabID", tabID);
-
+      console.log("LINE 21:", res);
       callback(res.status, tabID);
     });
   });
@@ -32,13 +28,13 @@ var getStatus = function(callback) {
 // the current status to the opposite
 var sendTabMessage = function(status, tabID) {
  var msg;
- if (status === 'off') {
+ if (status.switch === 'off') {
    msg = 'on';
  } else {
    msg = 'off';
  }
  chrome.tabs.sendMessage(tabID, {toggle: msg}, function(res){
-   console.log('toggleStatus:', res);
+   // console.log('toggleStatus:', res);
  });
 };
 
@@ -54,8 +50,8 @@ angular.module('graffio.mainController', [])
     // ie. if a user clicks 'On' it should send a message telling the app to start drawing
     // and also change the UI here to indicate that the next click will turn the app off
     // sendTabMessage(status, tabID);
-    console.log("FUNCTION TO SEND TO DRAW SCREEN:", status)
-    if (status === 'on') {
+    console.log("FUNCTION TO SEND TO DRAW SCREEN:", status.switch)
+    if (status.switch === 'on') {
       $state.go('draw');
     }
   });
@@ -79,14 +75,14 @@ angular.module('graffio.mainController', [])
   // even though they would update the $scope variable values...
   // $scope.$apply triggers the $digest, which in turn is what causes a UI update
   var setStatusUi = function(status) {
-    console.log('this is SetStatusUI Status: ', status);
+    // console.log('this is SetStatusUI Status: ', status);
     $scope.$apply(function() {
       if (status === 'off') {
         $scope.onOffButtonTxt = 'On';
-        console.log("onOffButton:" + $scope.onOffButtonTxt);
+        // console.log("onOffButton:" + $scope.onOffButtonTxt);
       } else {
         $scope.onOffButtonTxt = 'Off';
-        console.log("onOffButton:" + $scope.onOffButtonTxt);
+        // console.log("onOffButton:" + $scope.onOffButtonTxt);
       }
     });
   };
@@ -96,7 +92,7 @@ angular.module('graffio.mainController', [])
     //////////// *1* ////////////////////
   // function called when button is pressed by user wishing to toggle the current state
   $scope.toggleStatus = function() {
-    console.log("1: toggleStatus button has been pressed")
+    // console.log("1: toggleStatus button has been pressed")
     // figure out what existing state is from the content script
     getStatus(function(status, tabID) {
       // send a message to the tab and also set the current button value to be the opposite
@@ -104,20 +100,20 @@ angular.module('graffio.mainController', [])
       // and also change the UI here to indicate that the next click will turn the app off
       sendTabMessage(status, tabID);
       if (status === 'off') {
-        console.log("this is GetStatus Function Status:" + status)
+        // console.log("this is GetStatus Function Status:" + status)
         setStatusUi('on');  
       } else {
-        console.log("this is GetStatus Function Status:" + status)
+        // console.log("this is GetStatus Function Status:" + status)
         setStatusUi('off');
       }
     });
   };
  
-  console.log('initial get status called...');
+  // console.log('initial get status called...');
   // Initial call to getStatus to figure out what status the page was in last.
   getStatus(function(status) {
     setStatusUi(status);
-    console.log('status set');
+    // console.log('status set');
   });
 
 })

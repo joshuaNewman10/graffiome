@@ -1,8 +1,9 @@
 'use strict';
   var canvas;
-  var canvasFabric;
 
-  var toggle = 'off';
+
+  var canvasFabric;
+  var toggle = {switch: 'off', color:"black", "width":1, brush: "Pencil"}
 
   var settings = {
     tabUrl:  CryptoJS.SHA1(document.URL).toString(),
@@ -70,12 +71,12 @@ var initializePage = function() {
   };
 
   var toggleOff = function(){
-    toggle = 'off';
+    toggle.switch = 'off';
     disableDrawingMode();
   }
 
   var toggleOn = function(){
-    toggle = 'on';
+    toggle.switch = 'on';
     enableDrawingMode();
   }
 
@@ -129,50 +130,30 @@ var drawOtherUsersCanvasElement = function(context, data){
 var drawingOptions = {
   changeColor: function(color) {
     canvasFabric.freeDrawingBrush.color = color;
+    toggle.color = color;
   },
   changeLineWidth: function(width) {
     canvasFabric.freeDrawingBrush.width = width;
+    toggle.width = width;
   },
   changeBrushType: function(brush) {
-    // if (this.value === 'hline') {
-    //      canvas.freeDrawingBrush = vLinePatternBrush;
-    //    }
-    //    else if (this.value === 'vline') {
-    //      canvas.freeDrawingBrush = hLinePatternBrush;
-    //    }
-    //    else if (this.value === 'square') {
-    //      canvas.freeDrawingBrush = squarePatternBrush;
-    //    }
-    //    else if (this.value === 'diamond') {
-    //      canvas.freeDrawingBrush = diamondPatternBrush;
-    //    }
-    //    else if (this.value === 'texture') {
-    //      canvas.freeDrawingBrush = texturePatternBrush;
-        console.log(brush)
-         canvasFabric.freeDrawingBrush = new fabric[brush + 'Brush'](canvasFabric);
-      
+    canvasFabric.freeDrawingBrush = new fabric[brush + 'Brush'](canvasFabric);
+    toggle.brush = brush; 
+    canvasFabric.freeDrawingBrush.width = toggle.width;
+    canvasFabric.freeDrawingBrush.color = toggle.color;
   }
 };
 
-
   chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse){
-      console.log("6:", request);
-      // Toggle User Canvas Messages
       if ( request.toggle === 'off' ){
-          // toggleUserCanvasOff();
           toggleOff();
-          console.log('save the canvas plesae!');
           saveUserCanvas();
           // disableDrawingMode();
           sendResponse({confirm:'canvas turned off'});
       } else if ( request.toggle === 'on' ){
-        // enableDrawingMode();
-          // toggleUserCanvasOn(); 
           toggleOn();
           sendResponse({confirm:'canvas turned on'});
-          
-      // Initialize toggle status for popup button
       } else if ( request.getStatus === true ){
         sendResponse({status:toggle});
       } else if (request.canvasData) { // new Canvas data
@@ -180,7 +161,6 @@ var drawingOptions = {
       } else if (request.erase){
         eraseUserCanvas();
       } else if (request.brushSelect){
-        console.log("in brush select")
         drawingOptions.changeBrushType(request.brushSelect);
       } else if (request.changeColor){
         drawingOptions.changeColor(request.changeColor)
