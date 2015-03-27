@@ -1,9 +1,6 @@
 'use strict';
 
-
-
 // helper function to determine what the current tab is and perform a callback on that tabID value
-
 
 // Begin Angular Module
 angular.module('graffio.drawController', [
@@ -18,24 +15,35 @@ angular.module('graffio.drawController', [
     // ie. if a user clicks 'On' it should send a message telling the app to start drawing
     // and also change the UI here to indicate that the next click will turn the app off
     // sendTabMessage(status, tabID);
-    console.log("FUNCTION TO SEND TO DRAW SCREEN:", status)
-    if (status === 'off') {
+    if (status.switch === 'off') {
       $state.go('main');
     }
+
+    setStatusUi(status);  
+
+
   });
 
+  var setStatusUi = function(status) {
+    console.log('setStatusUI called...');
+    console.log('setStatusUI status: ', status);
+    $scope.$apply(function() {
+      $scope.brush = status.brush;
+      $scope.color = status.color;
+      $scope.thickness = status.width;
+      
+    });
+  };
+
   $scope.toggleStatus = function() {
-    console.log("DRAW STATUS HAS BEEN PRESSED")
-    // figure out what existing state is from the content script
     getStatus(function(status, tabID) {
-      // send a message to the tab and also set the current button value to be the opposite
-      // ie. if a user clicks 'On' it should send a message telling the app to start drawing
-      // and also change the UI here to indicate that the next click will turn the app off
+      console.log("LINE 36 togglestatus:", status)
       sendTabMessage(status, tabID);
     });
   };
 
-  $scope.brush = "paint";
+
+  $scope.brush = "Paint";
 
   $scope.thickness = 1;
 
