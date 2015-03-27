@@ -1,6 +1,12 @@
 .container {
   width:350px;
-  height:380px;
+  height:auto;
+  padding:20px;
+}
+
+#draw{
+  width:350px;
+  height:330px;
   padding:20px;
 }
 
@@ -34,5 +40,10 @@ button {
 
 #colorpicker {
   position: absolute;
-  bottom: 150px;
+}
+
+.finish{
+  position: absolute;
+  top: 238px;
+  left: 127px;
 }
