@@ -17,7 +17,7 @@ var getCurrentUser = function() {
   return ref.getAuth() ? ref.getAuth().uid.replace(':','') : null;
 };
 
-var saveUserCanvas = function(site, data) {
+var saveUserCanvas = function(site, data, canvasId) {
   if (getCurrentUser()){
     ref.child(site).child(getCurrentUser()).set(data);
     return true;
@@ -85,7 +85,7 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
   } else if (request.action === 'getUser') { // if it's requesting the token, return it
     sendResponse({user: getCurrentUser()});  
   } else if (request.action === 'saveCanvas') {
-    sendResponse({saveStatus: saveUserCanvas(request.site, request.data)});
+    sendResponse({saveStatus: saveUserCanvas(request.site, request.data, request.id)});
   } else if (request.action === 'startSiteData') {
     registerSite(request.site);
   } else if (request.action === 'stopSiteData') {

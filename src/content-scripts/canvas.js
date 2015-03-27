@@ -6,42 +6,54 @@
   var toggle = {switch: 'off', color:"black", "width":1, brush: "Pencil"}
 
   var settings = {
-    tabUrl:  CryptoJS.SHA1(document.URL).toString()
+    tabUrl:  CryptoJS.SHA1(document.URL).toString(),
+    currentCanvasId: ""
   };
 
-  var initializePage = function() {
-    //set up chrome to listen to site data
-    chrome.runtime.sendMessage({action: 'startSiteData', site: settings.tabUrl});
 
-    $(window).unload(function (){
-      chrome.runtime.sendMessage({action: 'stopSiteData', site: settings.tabUrl});
+var makeUniqueid = function() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for( var i=0; i < 15; i++ ) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+
+var initializePage = function() {
+  //set up chrome to listen to site data
+  chrome.runtime.sendMessage({action: 'startSiteData', site: settings.tabUrl});
+
+  $(window).unload(function (){
+    chrome.runtime.sendMessage({action: 'stopSiteData', site: settings.tabUrl});
+  });
+  var newId = makeUniqueid();
+  settings.currentCanvasId = newId;
+  //create canvas and append to page
+ 
+  //make fabric obj, attach canvas to frabric and associate with currentUser
+  getCurrentUser(function(user){
+
+    canvas = $('<canvas></canvas>')
+      .css({position: 'absolute', top: 0, left: 0, 'z-index':1000})
+      .attr('width', document.body.scrollWidth)
+      .attr('height', document.body.scrollHeight)
+      .addClass(user)
+      .attr('id', newId);
+
+    canvas.appendTo('body');
+
+    canvasFabric = new fabric.Canvas(newId, {
+      isDrawingMode: false
     });
-    
-    //create canvas and append to page
-   
-    //make fabric obj, attach canvas to frabric and associate with currentUser
-    getCurrentUser(function(user){
 
-      canvas = $('<canvas></canvas>')
-        .css({position: 'absolute', top: 0, left: 0, 'z-index':1000})
-        .attr('width', document.body.scrollWidth)
-        .attr('height', document.body.scrollHeight)
-        .addClass(user)
-        .attr('id', user);
+    canvasFabric.setHeight(document.body.scrollHeight);
+    canvasFabric.setWidth(document.body.scrollWidth);
+  
+    // settings.ctx = canvasFabric.getContext('2d');
+  }); 
 
-      canvas.appendTo('body');
-
-      canvasFabric = new fabric.Canvas(user, {
-        isDrawingMode: false
-      });
-
-      canvasFabric.setHeight(document.body.scrollHeight);
-      canvasFabric.setWidth(document.body.scrollWidth);
-    
-      // settings.ctx = canvasFabric.getContext('2d');
-    }); 
-
-  };
+};
 
  var getCurrentUser = function(callback){
   chrome.runtime.sendMessage({action: 'getUser'}, function(response) {
@@ -73,14 +85,16 @@
     var data = canvasFabric.toDataURL();
     // console.log('save user canvas: json canvas data', data);
     chrome.runtime.sendMessage(
-      {action: 'saveCanvas', site: settings.tabUrl, data: data}, 
+      {action: 'saveCanvas', site: settings.tabUrl, data: data, id: settings.currentCanvasId}, 
       function(response) {
         if (response.saveStatus) {
-          // console.log('saving user canvas');
+          console.log('saving user canvas');
         } else {
-          // console.log('failed to save canvas');
+          console.log('failed to save canvas');
       }
     });
+    //remove canvas fabric from DOM
+    
   };
 
 var appendOtherUsersCanvasToDOM = function(name) {
