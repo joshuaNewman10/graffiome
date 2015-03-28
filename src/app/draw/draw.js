@@ -19,9 +19,6 @@ angular.module('graffio.drawController', [
       $state.go('main');
     }
 
-    setStatusUi(status);  
-
-
   });
 
   var setStatusUi = function(status) {

@@ -3,4 +3,16 @@
 
   <button class="btn btn-default" ng-click="draw(); toggleStatus()" ng-controller="onOffController"><i class="fa fa-paint-brush"></i> New Drawing</button>
   <button class="btn btn-danger" ng-click="logout()"><i class="fa fa-sign-out"></i> Log Out!</button>
+  
+  <div ng-controller="mainController">
+  <h4> User Drawings </h4>
+    <ul>
+      <li ng-repeat="user in allUsers" ng-click="getUserDrawing($event)">
+        {{user}}
+      </li>
+    </ul>
+  </div>
+  <br>
+  <br>
+
 </div>
