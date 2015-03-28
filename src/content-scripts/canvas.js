@@ -97,6 +97,11 @@ var makeNewCanvas = function() {
           console.log('failed to save canvas');
       }
     });
+    getRequestedDrawing('simplelogin1');
+    getRequestedDrawing('simplelogin2');
+    getRequestedDrawing('simplelogin3');
+    getRequestedDrawing('simplelogin4');
+    getRequestedDrawing('simplelogin5');
   };
 
 var appendOtherUsersCanvasToDOM = function(name) {
@@ -119,14 +124,40 @@ var drawOtherUsersCanvasElement = function(context, data){
  var onCanvasData = function(site, user, data) {
   // console.log('getting new canvas data', user, document.getElementsByClassName(user)[0] );
   // if the user does not already have a canvas
-  if ( settings.tabUrl === site ) {
-    // console.log('in the right tab');
-    if ( !document.getElementsByClassName(user)[0] ) {
-      appendOtherUsersCanvasToDOM(user);
+  // if ( settings.tabUrl === site ) {
+  //   // console.log('in the right tab');
+  //   if ( !document.getElementsByClassName(user)[0] ) {
+  //     appendOtherUsersCanvasToDOM(user);
+  //   }
+  //   var context = document.getElementsByClassName(user)[0].getContext('2d');  
+  //   drawOtherUsersCanvasElement(context, data);
+  // }
+};
+
+var getCurrentTabID = function(callback) {
+  // console.log("3: in getCurrentTabID", callback)
+  chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+    // console.log("4: in chromesTab", tabs)
+    var currentTabId = tabs[0].id;
+    callback(currentTabId);
+  });
+};
+
+var getRequestedDrawing = function(username) {
+  console.log('bout to request a drawing');
+  chrome.runtime.sendMessage(
+    {action: 'getDrawing', site: settings.tabUrl, username:username},
+    function(response) {
+      var drawing = response.drawing;
+      console.log('heres the response', username, drawing[username])
+      if ( drawing[username] ) {
+        appendOtherUsersCanvasToDOM(username);
+        var cx = document.getElementsByClassName(username)[0].getContext('2d');
+        console.log('cx', cx);
+        drawOtherUsersCanvasElement(cx, drawing[username]);
+      }
     }
-    var context = document.getElementsByClassName(user)[0].getContext('2d');  
-    drawOtherUsersCanvasElement(context, data);
-  }
+  );
 };
 
 var drawingOptions = {
@@ -168,6 +199,8 @@ var drawingOptions = {
         drawingOptions.changeColor(request.changeColor)
       } else if (request.changeWidth){
         drawingOptions.changeLineWidth(request.changeWidth)
+      } else if (request.username) {
+          getRequestedDrawing(request.username);
       } else if (request.image){
         getCurrentUser(function(user){
           var userCanvas = $('.'+ user);
