@@ -153,7 +153,7 @@ var getRequestedDrawing = function(username) {
     {action: 'getDrawing', site: settings.tabUrl, username:username},
     function(response) {
       var drawing = response.drawing;
-      console.log('heres the response', username, drawing[username])
+      console.log('heres the response', username, drawing[username]); 
       if ( drawing[username] ) {
         appendOtherUsersCanvasToDOM(username);
         var cx = document.getElementsByClassName(username)[0].getContext('2d');
@@ -210,6 +210,8 @@ var drawingOptions = {
           var userCanvas = $('.'+ user);
           addOneTimeClickEvent(userCanvas, addImage, request.image);
         });
+      } else if (request.getUserDrawing) {
+        getRequestedDrawing(request.getUserDrawing);
       }
     }
   );
