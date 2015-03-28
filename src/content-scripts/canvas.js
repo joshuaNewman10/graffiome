@@ -2,13 +2,17 @@
   var canvas;
 
 
-  var canvasFabric;
-  var toggle = {switch: 'off', color:"black", "width":1, brush: "Pencil"}
 
+  var canvasFabric;
+  
   var settings = {
     tabUrl:  CryptoJS.SHA1(document.URL).toString(),
     currentCanvasId: ""
   };
+
+  var toggle = {switch: 'off', color:"black", "width":1, brush: "Pencil", tabUrl: settings.tabUrl }
+
+
 
 
 var makeUniqueid = function() {

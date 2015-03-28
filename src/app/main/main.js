@@ -11,6 +11,8 @@ var getCurrentTabID = function(callback) {
   });
 };
 
+
+
 // getStatus takes a callback and applies it to the status of the current tab
 // it queries the current tab for the status of the app on that tab
 var getStatus = function(callback) {
@@ -41,8 +43,15 @@ var sendTabMessage = function(status, tabID) {
 // Begin Angular Module
 angular.module('graffio.mainController', [])
 .controller('mainController', function($scope, $state) {
-  var ref = new Firebase('https://radiant-heat-919.firebaseio.com');
+  var ref = new Firebase('https://radiant-heat-919.firebaseio.com/web/data/sites/');
 
+
+
+  var setUsersUi = function(allTheUsers) {
+    $scope.$apply(function() {
+      $scope.allUsers = allTheUsers;      
+    });
+  };
 
 //FUNCTION TO SEND TO DRAW SCREEN
   getStatus(function(status, tabID) {
@@ -54,7 +63,39 @@ angular.module('graffio.mainController', [])
     if (status.switch === 'on') {
       $state.go('draw');
     }
+
+    $scope.allUsers = [];
+
+    ref.child(status.tabUrl).on('value', function(dataSnapshot) {
+      var values = dataSnapshot.val();
+      var arr = [];
+      console.log(values)
+      for(var key in values){
+        arr.push(key);
+      }
+      setUsersUi(arr)    
+    });
+
+
+
+    // console.log(query)
+    // .equalTo(25).on("child_added", function(snapshot) {
+    //   console.log(snapshot.key());
+    // });
+ 
   });
+
+  console.log("allUsers:", $scope.allUsers)
+
+  $scope.getUserDrawing = function(){
+    var user = this.user;
+    console.log(user)
+    getCurrentTabID(function(activeTab){
+      chrome.tabs.sendMessage(activeTab, {getUserDrawing: user}, function(res) {
+        console.log(res)
+      });
+    });    
+  }
 
   $scope.draw = function(){
     $state.go('draw');
