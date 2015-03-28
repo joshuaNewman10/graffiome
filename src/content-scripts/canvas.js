@@ -101,11 +101,6 @@ var makeNewCanvas = function() {
           console.log('failed to save canvas');
       }
     });
-    getRequestedDrawing('simplelogin1');
-    getRequestedDrawing('simplelogin2');
-    getRequestedDrawing('simplelogin3');
-    getRequestedDrawing('simplelogin4');
-    getRequestedDrawing('simplelogin5');
   };
 
 var appendOtherUsersCanvasToDOM = function(name) {
