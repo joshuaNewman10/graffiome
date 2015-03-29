@@ -34,7 +34,6 @@ var sendTabMessage = function(status, tabID) {
  } else {
    msg = 'off';
  }
-
  chrome.tabs.sendMessage(tabID, {toggle: msg}, function(res){
 
  });
@@ -44,8 +43,6 @@ var sendTabMessage = function(status, tabID) {
 angular.module('graffio.mainController', [])
 .controller('mainController', function($scope, $state) {
   var ref = new Firebase('https://radiant-heat-919.firebaseio.com/web/data/sites/');
-
-
 
   var setUsersUi = function(allTheUsers) {
     $scope.$apply(function() {
@@ -156,4 +153,4 @@ angular.module('graffio.mainController', [])
     // console.log('status set');
   });
 
-})
+});
