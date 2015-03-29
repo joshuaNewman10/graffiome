@@ -212,8 +212,8 @@ chrome.runtime.onMessage.addListener(
       });
     } else if (request.getUserDrawing) {
       getRequestedDrawing(request.getUserDrawing);
-    } else if (request.removeDrawing) {
-      removeRequestedDrawing(request.removeDrawing);
+    } else if (request.removeUserDrawing) {
+      removeRequestedDrawing(request.removeUserDrawing);
     }
   }
 );
