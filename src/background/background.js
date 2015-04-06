@@ -91,10 +91,8 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
   } else if (request.action === 'stopSiteData') {
     unregisterSite(request.site);
   } else if (request.action === 'getDrawing'){
-    console.log('wowowowowowowow we wanna drawing', request, sender, sendResponse);
-    var res = ref.child(request.site).once('value', function(snap) {
+    var results = ref.child(request.site).once('value', function(snap) {
        var drawing = snap.val();
-       console.log('heres the drawing', drawing);
         sendResponse({drawing: drawing});
     });
   }
