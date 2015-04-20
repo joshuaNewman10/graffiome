@@ -1,6 +1,11 @@
 'use strict';
   var canvas;
   var canvasFabric;
+  var settings = {
+    tabUrl:  CryptoJS.SHA1(document.URL).toString(),
+    currentCanvasId: ''
+  };
+
   var toggle = {
     switch: 'off', 
     color:'black', 
@@ -9,10 +14,7 @@
     tabUrl: settings.tabUrl 
   };
 
-  var settings = {
-    tabUrl:  CryptoJS.SHA1(document.URL).toString(),
-    currentCanvasId: ''
-  };
+  
 
 var makeUniqueid = function() {
   var text = '';
@@ -116,21 +118,22 @@ var drawOtherUsersCanvasElement = function(context, data){
   };
 };
 
-/*
+
 //Previously using this to append drawing data from server, now only adding desired drawings
  var onCanvasData = function(site, user, data) {
-  console.log('getting new canvas data', user, document.getElementsByClassName(user)[0] );
-  if the user does not already have a canvas
-  if ( settings.tabUrl === site ) {
-    // console.log('in the right tab');
-    if ( !document.getElementsByClassName(user)[0] ) {
-      appendOtherUsersCanvasToDOM(user);
-    }
-    var context = document.getElementsByClassName(user)[0].getContext('2d');  
-    drawOtherUsersCanvasElement(context, data);
-  }
+  console.log('onCanvasDAta');
+  // console.log('getting new canvas data', user, document.getElementsByClassName(user)[0] );
+  // if the user does not already have a canvas
+  // if ( settings.tabUrl === site ) {
+  //   // console.log('in the right tab');
+  //   if ( !document.getElementsByClassName(user)[0] ) {
+  //     appendOtherUsersCanvasToDOM(user);
+  //   }
+  //   var context = document.getElementsByClassName(user)[0].getContext('2d');  
+  //   drawOtherUsersCanvasElement(context, data);
+  // }
 };
-*/
+
 
 var getCurrentTabID = function(callback) {
   // console.log("3: in getCurrentTabID", callback)
@@ -183,6 +186,7 @@ var drawingOptions = {
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse){
+    //User drawing completed, remove Canvas from screen
     if ( request.toggle === 'off' ){
         toggleOff();
         saveUserCanvas();
