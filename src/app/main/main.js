@@ -1,5 +1,57 @@
 'use strict';
 
+var fakeNames = ['Tracy',
+'Evita',
+'Corrie',
+'Kathrin',
+'Debbie',
+'Janelle',
+'Claretta',
+'Berneice',
+'Sherlyn',
+'Charlie',
+'Bradly',
+'Elenore',
+'Marline',
+'Wan',
+'Brandi',
+'Quentin',
+'Julianna',
+'Yuette',
+'Andria',
+'Elsa',
+'Antwan',
+'Richard',
+'Odell',
+'Kent',
+'Madonna',
+'Rolande',
+'Torie',
+'Kenia',
+'Alona',
+'Leif',
+'Machelle',
+'Dagmar',
+'Mindi',
+'Lynda',
+'Yung',
+'Chance',
+'Selina',
+'Wendie',
+'Barrie',
+'Angelena',
+'Coralie',
+'Naomi',
+'Marina',
+'Buffy',
+'Silva',
+'Lavinia',
+'Marine',
+'Rhiannon',
+'Brice',
+'Gertrud' ];
+
+
 // helper function to determine what the current tab is and perform a callback on that tabID value
 //////////////////*3*/////////////////////
 var getCurrentTabID = function(callback) {
@@ -65,12 +117,18 @@ angular.module('graffio.mainController', [])
 
     ref.child(status.tabUrl).on('value', function(dataSnapshot) {
       var values = dataSnapshot.val();
-      var arr = [];
-      console.log(values)
+      var namesArray = [];
       for(var key in values){
-        arr.push(key);
+        namesArray.push(key);
       }
-      setUsersUi(arr)    
+      namesArray = namesArray.map(function(elem) {
+        var str = elem;
+        var regex = /\d+/;
+        var regexTest = str.match(regex);
+        var numbersLength = regexTest[0].length;
+        return numbersLength === 1 ? fakeNames[elem.slice(-1)] : fakeNames[elem.slice(-2)];
+      });
+      setUsersUi(namesArray);  
     });
 
 
@@ -86,10 +144,11 @@ angular.module('graffio.mainController', [])
 
   $scope.getUserDrawing = function(){
     var user = this.user;
-    console.log(user)
+    var loginName = 'simplelogin' + fakeNames.indexOf(user);
+    console.log(user);
     getCurrentTabID(function(activeTab){
-      chrome.tabs.sendMessage(activeTab, {getUserDrawing: user}, function(res) {
-        console.log(res)
+      chrome.tabs.sendMessage(activeTab, {getUserDrawing: loginName}, function(res) {
+        console.log(res);
       });
     });    
   }

@@ -7,7 +7,8 @@ angular.module('graffio.signupController', [])
     // firebase creation of new user
     ref.createUser({
       email    : $scope.email,
-      password : $scope.password
+      password : $scope.password,
+      username : 'jj'
     }, function(error, authData) {
       if (error) {
         console.log('Error creating user:', error);
